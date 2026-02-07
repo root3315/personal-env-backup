@@ -26,6 +26,9 @@ chmod +x personal_env_backup.py
 # See what would be backed up
 python3 personal_env_backup.py discover
 
+# Show missing dotfiles
+python3 personal_env_backup.py missing
+
 # Create a backup
 python3 personal_env_backup.py backup
 
@@ -53,6 +56,7 @@ python3 personal_env_backup.py cleanup --keep 3
 | Command      | Description                                    |
 |-------------|------------------------------------------------|
 | `discover`   | Show all dotfiles/configs that would be backed up |
+| `missing`    | Show expected dotfiles that are missing from the system |
 | `backup`     | Create a new compressed backup                 |
 | `list`       | List existing backups with size and date       |
 | `restore`    | Restore dotfiles from a backup archive         |

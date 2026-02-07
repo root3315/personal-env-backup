@@ -83,6 +83,24 @@ def discover_dotfiles():
     return sorted(found)
 
 
+def discover_missing_dotfiles():
+    """Scan home directory and return list of expected but missing dotfiles/configs."""
+    home = get_home_dir()
+    missing = []
+
+    for item in COMMON_DOTFILES:
+        full_path = home / item
+        if not full_path.exists():
+            missing.append(str(full_path))
+
+    for item in CONFIG_DIRS:
+        full_path = home / item
+        if not full_path.exists():
+            missing.append(str(full_path))
+
+    return sorted(missing)
+
+
 def compute_checksum(filepath):
     """Compute SHA256 checksum for a given file."""
     sha256 = hashlib.sha256()
@@ -360,6 +378,8 @@ def main():
 
     sub.add_parser("discover", help="Show dotfiles that would be backed up")
 
+    sub.add_parser("missing", help="Show expected dotfiles that are missing")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -393,6 +413,14 @@ def main():
                 print(f"  {item}{marker}")
         else:
             print("No dotfiles found.")
+    elif args.command == "missing":
+        missing = discover_missing_dotfiles()
+        if missing:
+            print(f"Missing {len(missing)} item(s):")
+            for item in missing:
+                print(f"  {item}")
+        else:
+            print("All expected dotfiles are present.")
 
 
 if __name__ == "__main__":
